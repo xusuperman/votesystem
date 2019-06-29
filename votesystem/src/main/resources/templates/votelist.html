@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<HTML
+        xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>投票列表</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.user.username}"></span> <SPAN class="return">
+        <A href="http://localhost:8080/votesystem/selectSubject?pageIndex=1">返回列表</A></SPAN>
+        <SPAN class="addnew"><A href="http://localhost:8080/votesystem/goadd">添加新投票</A></SPAN>
+        <SPAN class="modify"><A href="http://localhost:8080/votesystem/selectWeiHuSubject?pageIndex=1">维护</A></SPAN>
+        <SPAN class="return">
+            <A href="http://localhost:8080/votesystem/exit">注销</A></SPAN></DIV>
+    <DIV class="search">
+        <FORM action="selectSubject" method="post"><INPUT name="wheretitle" class="input-text" type="text"/><INPUT
+                name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="vote">
+    <H2>投票列表</H2>
+   <!-- <DIV style="float: right;">
+        <A href="@{http://localhost:8080//Subject-list?pageIndex=1}">首页</A>
+        | 上一页 | 下一页 | <A href="@{'http://localhost:8080/votesystem/selectAllVote/'+${}+'/3'}">末页</A>
+    </DIV>-->
+    <BR>
+    <UL class="list">
+        <LI th:each="s,sstate: ${subjects.list}">
+          <H4>
+                <A th:href="@{http://localhost:8080/votesystem/selectVoteView(sid=${s.sid})}" th:text="${s.title}"></A>
+            </H4>
+            <DIV class="join"><A th:href="@{http://localhost:8080/votesystem/selectVote(sid=${s.sid})}">我要参与</A></DIV>
+            <P class="info" >共有[[${s.totalchoose}]] 个选项，已有[[${s.totalitems}]]个投票</P></LI>
+       <LI>
+      <!--  <H4><A href="" th:text="${s.title}"></A>
+        </H4>
+        <DIV class="join">
+            <A href="">我要参与</A>
+        </DIV>
+        <P class="info" th:text="共有 ${s.chooses.size} 个选项，已有个投票。"></P>
+        </LI>&ndash;&gt;-->
+      <!--  <LI class="odd">
+            <H4><A
+                    href="http://localhost:8080/myVote/Vote-view.action?entityId=141">学士后9班谁最2</A>
+            </H4>
+            <DIV class="join"><A href="http://localhost:8080/myVote/Vote-vote.action?entityId=141">我要参与</A></DIV>
+            <P class="info">共有 4 个选项，已有 8 个投票。</P></LI>-->
+    </UL>
+
+
+    <DIV  style="float: right;" >
+
+        <A th:if="${subjects.pageNum} gt 1"  th:href="@{'http://localhost:8080/votesystem/selectSubject'(pageIndex=1,wheretitle=${titleCondition})}">首页 |</A>
+        <A th:if="${subjects.pageNum} gt 1" th:href="@{'http://localhost:8080/votesystem/selectSubject'(pageIndex=${subjects.pageNum-1},wheretitle=${titleCondition})}">| 上一页 |</A>
+        <A th:if="${subjects.pageNum} lt ${subjects.pages}"  th:href="@{'http://localhost:8080/votesystem/selectSubject'(pageIndex=${subjects.pageNum+1},wheretitle=${titleCondition})}">下一页 |</A>
+        <A th:if="${subjects.pageNum} lt ${subjects.pages}"  th:href="@{'http://localhost:8080/votesystem/selectSubject'(pageIndex=${subjects.pages},wheretitle=${titleCondition})}">末页</A>
+
+    </DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+<script th:inline="javascript">
+
+    var message = [[${msg}]];
+    if(messgae!='' || message!=null){
+        alert(message);
+    }
+
+
+</script>
+</BODY>
+</HTML>

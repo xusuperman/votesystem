@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.com.cssl.dao.itemDao">
+
+    <select id="selecItemstBychooseId" resultType="item">
+        select * from item where oid=#{oid}
+    </select>
+    <select id="selecItemstByUserId" resultType="item">
+       select * from item where uid=#{uid}
+    </select>
+    <insert id="insertItem" parameterType="list">
+        insert ignore item (oid,uid,sid)
+        VALUES
+        <foreach collection="oidarray" item="item" index="index" separator=",">
+            (#{item},#{uid},#{sid})
+        </foreach>
+     </insert>
+
+    <delete id="deleteitem">
+        delete from item where iid=#{iid} or oid=#{oid}
+    </delete>
+
+
+
+</mapper>

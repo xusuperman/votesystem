@@ -1,0 +1,78 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>管理投票</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <script th:inline="javascript">
+        function del(id) {
+            if (confirm('确定要删除？')) {
+                location.href = 'delete?sid=' + id;
+            }
+        }
+        var message = [[${msg}]];
+        if(messgae!='' || message!=null){
+            alert(message);
+        }
+    </script>
+</head>
+<body>
+
+
+<div id="header" class="wrap">
+    <img src="images/logo.gif"/>
+</div>
+<div id="navbar" class="wrap">
+    <div class="profile">
+        您好，[[${session.user.username}]]
+        <span class="return"><a href="http://localhost:8080/votesystem/selectSubject">返回列表</a></span>
+        <span class="addnew"><a href="http://localhost:8080/votesystem/goadd">添加新投票</a></span>
+        <span class="modify"><a href="http://localhost:8080/votesystem/selectWeiHuSubject">维护</a></span>
+        <span class="return"><a href="http://localhost:8080/votesystem/exit">注销</a></span>
+    </div>
+    <div class="search">
+        <FORM action="selectWeiHuSubject" method="post">
+            <INPUT name="wheretitle" class="input-text" type="text"/>
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </div>
+</div>
+
+<div th:if="${session.user.isAdmin} eq 1" id="vote" class="wrap" >
+    <h2>投票列表</h2>
+    <!--  <div style="float: right">
+          <a href="Subject-modify?pageIndex=1">首页</a> |
+          上一页
+          |
+          <a href="Subject-modify?pageIndex=2">下一页</a>
+          |
+          <a href="Subject-modify?pageIndex=3">末页</a>
+      </div>-->
+    <br/>
+    <ul class="list">
+        <li class="odd" th:each="s :${subjects.list}">
+            <h4>
+                <em>
+                    <a th:href="@{'http://localhost:8080/votesystem/gomodify'(sid=${s.sid})}">维护</a>
+                    <a href="javascript:del('${s.sid}')">删除</a>
+                </em>
+                <a th:href="@{'http://localhost:8080/votesystem/selectVoteView'(sid=${s.sid})}"th:text="${s.title}"></a>
+            </h4>
+            <p class="info">共有[[${s.totalchoose}]] 个选项，已有[[${s.totalitems}]]个投票。</p>
+        </li>
+    </ul>
+    <div style="float: right">
+        <A th:if="${subjects.pageNum} gt 1" th:href="@{'http://localhost:8080/votesystem/selectWeiHuSubject'(pageIndex=1,wheretitle=${titleCondition})}">首页 |</A>
+        <A th:if="${subjects.pageNum} gt 1" th:href="@{'http://localhost:8080/votesystem/selectWeiHuSubject'(pageIndex=${subjects.pageNum-1},wheretitle=${titleCondition})}">| 上一页 |</A>
+        <A th:if="${subjects.pageNum} lt ${subjects.pages}"  th:href="@{'http://localhost:8080/votesystem/selectWeiHuSubject'(pageIndex=${subjects.pageNum+1},wheretitle=${titleCondition})}">下一页 |</A>
+        <A th:if="${subjects.pageNum} lt ${subjects.pages}"  th:href="@{'http://localhost:8080/votesystem/selectWeiHuSubject'(pageIndex=${subjects.pages},wheretitle=${titleCondition})}">末页</A>
+    </div>
+</div>
+<div th:if="${session.user.isAdmin} eq 2" id="vote">
+    用户权限不足，请联系管理员！
+</div>
+<div id="footer" class="wrap">
+    北大青鸟 &copy; 版权所有
+</div>
+</body>
+</html>

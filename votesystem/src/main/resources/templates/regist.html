@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>注   册</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <script language="javascript">
+        var fl = true;
+
+        function findUser(name){
+            UserDwr.getUserByName(name,function(flag){
+                if(flag){
+                    alert('用户名被占用');
+                    fl = false;
+                }else{
+                    fl = true;
+                }
+            });
+        }
+
+        function check(){
+            var username = document.getElementById('userName').value;
+            var password = document.getElementById('password').value;
+            var repass = document.getElementById('repass').value;
+
+            if(username==''){
+                alert('用户名不能为空');
+                return false;
+            }
+            if(password==''){
+                alert('密码不能为空');
+                return false;
+            }
+            if(password!=repass){
+                alert('重复密码必须一致');
+                return false;
+            }
+            //用户是否存在
+            if(!fl){
+                alert('用户名被占用');
+                return fl;
+            }
+            return true;
+
+        }
+    </script>
+
+</head>
+<body>
+<div id="header" class="wrap">
+    <img src="images/logo.gif" />
+</div>
+<div id="navbar" class="wrap">
+    <div class="search">
+        <!--
+            <form method="get" action="index.html">
+                <input type="text" name="keywords" class="input-text" /><input type="submit" name="submit" class="input-button" value="" />
+            </form>
+        -->
+    </div>
+</div>
+<div id="register" class="box">
+    <h2>新用户注册</h2>
+    <div class="content">
+        <form method="post" action="User-register.action" onsubmit="return check()">
+            <dl>
+                <dt>用户名：</dt>
+                <dd><input type="text" id="userName" class="input-text" name="userVo.userName" value="" onblur="findUser(this.value)"/></dd>
+                <dt>密码：</dt>
+                <dd><input type="password" id="password" class="input-text" name="userVo.password" value=""/></dd>
+                <dt>确认密码：</dt>
+                <dd><input type="password" id="repass" class="input-text" name="userVo.confirmPassword" value=""/></dd>
+                <dt><input type="hidden" name="struts.token.name" value="token" />
+                    <input type="hidden" name="token" value="NV3Q42LYM4LU69F8D2I8OFZ9DTAUB2FH" /></dt>
+                <dd><input type="submit" class="input-button" name="submit" value="" /></dd>
+            </dl>
+        </form>
+        <div class="error"></div>
+        <div class="error"></div>
+    </div>
+</div>
+<div id="footer" class="wrap">
+    北大青鸟 &copy; 版权所有
+</div>
+</body>
+</html>

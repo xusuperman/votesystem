@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.com.cssl.dao.chooseDao">
+
+    <select id="selectChooseBySubjectId" resultType="choose">
+        select * from choose where osid=#{osid}
+    </select>
+    <select id="selectAllItemsNumberDetailBySid" resultType="choose">
+        SELECT o.oid,o.content,(SELECT COUNT(*) FROM item WHERE sid=o.osid AND oid=o.oid) itemnumber,CONCAT(ROUND((SELECT COUNT(*) FROM item WHERE sid=o.osid AND oid=o.oid)/(SELECT COUNT(*) FROM item WHERE sid=o.osid)*100,2),'%') 'baifenbi',(SELECT COUNT(*) FROM item WHERE sid=o.osid AND oid=o.oid) 'piao' FROM `choose` o
+        LEFT JOIN item i ON i.sid=o.osid
+        WHERE o.osid=#{osid}
+        GROUP BY o.oid
+    </select>
+
+    <insert id="addChoose" parameterType="list">
+        insert ignore choose (content,osid)
+        VALUES
+        <foreach collection="contentlist" item="item" index="index" separator=",">
+            (#{item},#{osid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteChoose">
+        delete from choose where oid=#{oid}
+    </delete>
+    <update id="updateChoose">
+        update choose set content=#{content} where oid=#{oid}
+    </update>
+   <insert id="insertChoose">
+        insert into choose VALUES(DEFAULT,#{content},#{osid})
+   </insert>
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.com.cssl.dao.userdao">
+
+    <select id='login' resultType="com.cssl.pojo.user" >
+        select * from user where username=#{username} and password=#{password}
+    </select>
+    <insert id="register">
+        insert into user(username,password) values(#{username},#{password},#{isAdmin})
+    </insert>
+    <select id="selectNameInUser" resultType="int">
+        select count(1) from user where username=#{username}
+    </select>
+
+</mapper>

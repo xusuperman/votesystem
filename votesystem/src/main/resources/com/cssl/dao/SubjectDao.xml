@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.com.cssl.dao.SubjectDao">
+
+    <select id='selectSubject' resultType="map">
+            select s.sid,s.title,count(distinct c.oid) totalchoose,count(distinct i.iid) totalitems from vote_subject s
+            left join choose c
+            on s.sid=c.osid
+            left join item i
+            on c.oid=i.oid
+            <include refid="condition" />
+            group by s.sid
+    </select>
+
+
+    <select id='selectSubjectItemDetail' resultType="Subject" >
+
+            select s.sid,s.title,s.type,count(distinct c.oid) totalchoose,count(distinct i.iid) totalitems from vote_subject s
+            left join choose c
+            on s.sid=c.osid
+            left join item i
+            on c.oid=i.oid
+            where s.sid=#{sid}
+            group by s.sid
+
+    </select>
+    <select id="selectChooseBySubjectId" resultType="choose">
+        select * from choose where osid=#{osid}
+    </select>
+    <select id="selectItemBySubjectId" resultType="item">
+        select * from item where sid=#{sid}
+    </select>
+   <sql id="condition">
+       <where>
+           <if test="wheretitle!='' and wheretitle!=null">
+                s.title like concat('%',#{wheretitle},'%')
+           </if>
+       </where>
+
+
+   </sql>
+    <insert id="addSubject" keyColumn="sid" keyProperty="sid">
+
+            insert into vote_subject (title,type) values (#{title},#{type})
+
+    </insert>
+
+    <delete id="deleteSubject">
+          delete from vote_subject where sid=#{sid}
+    </delete>
+   <update id="updateSubject">
+        UPDATE vote_subject set title=#{title},type=#{type} where sid=#{sid}
+   </update>
+
+</mapper>
